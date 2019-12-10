@@ -230,7 +230,7 @@ public class WikiWalker {
         if(links.containsKey(src)==false)
             return nextarticles;
         hm=(TreeMap)links.get(src);
-        nextarticles.add(src);
+
         if(hm.isEmpty()==true)
             return nextarticles;
         Set<String> keysvalues=hm.keySet();
@@ -245,10 +245,13 @@ public class WikiWalker {
                maxarticle=nextarticle;
            }
         }
+
         //System.out.println("value of k = "+ k +nextarticles);
-        if(maxCLickThrough!=0)
-            nextarticles.addAll(mostLikelyTrajectory(maxarticle,k-1));
-        return nextarticles;
+        if(maxCLickThrough!=0) {
+            nextarticles.add(maxarticle);
+            nextarticles.addAll(mostLikelyTrajectory(maxarticle, k - 1));
+        }
+            return nextarticles;
         //throw new UnsupportedOperationException();
     }
 
