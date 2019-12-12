@@ -61,6 +61,8 @@ public class WikiWalker {
         int k=input.nextInt();
         System.out.println(ww.mostLikelyTrajectory(src,k));
 
+
+
     }
     public void print_links()
     {
@@ -223,36 +225,47 @@ public class WikiWalker {
      *         trajectory starting at src.
      */
     public List<String> mostLikelyTrajectory(String src, int k) {
+
         List<String> nextarticles=new ArrayList<>();
-        if(k==0)
+
+        if(k<=0 || src==null || links.containsKey(src)==false) {
+            nextarticles.add(0,"" );
             return nextarticles;
+        }
         TreeMap hm=new TreeMap<String,Integer>();
-        if(links.containsKey(src)==false)
-            return nextarticles;
         hm=(TreeMap)links.get(src);
 
-        if(hm.isEmpty()==true)
+        if(hm.isEmpty()==true) {
+            nextarticles.add(0,"" );
             return nextarticles;
+        }
+
         Set<String> keysvalues=hm.keySet();
-        int maxCLickThrough=0;
+        int maxCLickThrough=-1;
         String maxarticle="";
         for(String nextarticle:keysvalues)
         {
-           int tempcount=(int)hm.get(nextarticle);
-           if(tempcount>maxCLickThrough)
-           {
-               maxCLickThrough=tempcount;
-               maxarticle=nextarticle;
-           }
+            int tempcount=(int)hm.get(nextarticle);
+            if(tempcount>maxCLickThrough)
+            {
+                maxCLickThrough=tempcount;
+                maxarticle=nextarticle;
+            }
         }
 
         //System.out.println("value of k = "+ k +nextarticles);
-        if(maxCLickThrough!=0) {
+        if(maxCLickThrough!=-1) {
             nextarticles.add(maxarticle);
-            nextarticles.addAll(mostLikelyTrajectory(maxarticle, k - 1));
+            List<String> ansnextarticles=new ArrayList<>();
+            ansnextarticles=mostLikelyTrajectory(maxarticle, k - 1);
+            if(ansnextarticles.contains("")==false)
+                nextarticles.addAll(ansnextarticles);
         }
-            return nextarticles;
+        //System.out.println(nextarticles);
+        return nextarticles;
         //throw new UnsupportedOperationException();
     }
 
-}
+
+    }
+
